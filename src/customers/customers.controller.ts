@@ -3,12 +3,15 @@ import { Prisma } from '@prisma/client';
 import { CustomersService } from './customers.service';
 import { createCustomerDto } from '../DTO/createcudtomer.dto';
 import { updateCustomerDto } from '../DTO/update-customer.dto';
-
+import { Throttle, SkipThrottle } from '@nestjs/throttler';
+//                    
 @Controller('customers')
 
 export class CustomersController {
 
     constructor(private readonly customersService: CustomersService) {}
+
+    @Throttle({default : {ttl: 3000, limit: 5}})
    @Get()
     getAllCustomers() {
         return this.customersService.getAllCustomers();
